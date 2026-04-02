@@ -124,6 +124,59 @@ input[type=text]:focus, textarea:focus { border-color: #1D9E75; }
 </style>
 </head>
 <body>
+
+<!-- ── 主控端 HTML（手機模式時由 JS 隱藏） ── -->
+<div id="admin-ui">
+  <div class="container">
+    <div class="header">
+      <h1>🕵️ 臥底問卷產生器</h1>
+      <p>十八尖山長老教會學生團契</p>
+    </div>
+    <div id="step1">
+      <div class="card">
+        <div class="card-title">成員名單</div>
+        <div class="input-row">
+          <input type="text" id="name-input" placeholder="輸入名字，按 Enter 新增" maxlength="10">
+          <button class="btn btn-primary" onclick="addMember()">新增</button>
+        </div>
+        <div id="member-list"><div class="empty-hint"><div class="icon">👥</div>先新增成員</div></div>
+      </div>
+      <div id="gen-area" style="display:none">
+        <div class="warning" id="warn-msg"></div>
+        <div class="input-row">
+          <input type="text" id="seed-input" placeholder="活動密鑰（如 20260401）留空則隨機">
+        </div>
+        <button class="btn btn-primary btn-full" onclick="generate()">✨ 生成每人的任務卡與 QR Code</button>
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <div class="card-title">計分方式</div>
+        <div class="score-row"><span>🕵️ 成功套出一筆資訊</span><span class="sg">+2 分</span></div>
+        <div class="score-row"><span>🕵️ 套出牧師資訊 ★</span><span class="sa">+3 分</span></div>
+        <div class="score-row"><span>🕵️ 抓到別人套自己</span><span class="sg">+1 分</span></div>
+        <div class="score-row"><span>🕵️ 全清所有臥底目標</span><span class="sa">+2 獎勵</span></div>
+        <div class="score-row"><span>🕵️ 被成功套到（每題）</span><span class="sr">–1 分</span></div>
+        <div class="score-row"><span>📖 對方察覺你傳的經節</span><span class="sg">+3 分</span></div>
+        <div class="score-row"><span>📖 察覺對方傳來的經節</span><span class="sg">+2 分</span></div>
+        <div class="hint">💡 每人有兩個任務：臥底套話 ＋ 傳遞聖經經節。掃描 QR Code 即可在手機上看到完整任務卡。</div>
+      </div>
+    </div>
+    <div id="step2" style="display:none">
+      <div class="card">
+        <div style="font-size:13px;color:#888;margin-bottom:10px;">選擇成員，讓對方掃 QR Code</div>
+        <div class="name-tabs" id="name-tabs"></div>
+      </div>
+      <div id="card-display"></div>
+      <div class="actions">
+        <button class="btn btn-secondary" onclick="goBack()">← 重新設定</button>
+        <button class="btn btn-secondary" onclick="regen()">🔀 重新生成</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 手機模式時動態填入 -->
+<div id="phone-ui" style="display:none"></div>
+
 <script>
 // ── 資料 ──────────────────────────────────────────────────────────────
 const LQ = [
@@ -274,9 +327,13 @@ const MODE = urlParams.has('m') ? 'phone' : 'admin';
 // ════════════════════════════════════════════════════════════════════════
 if (MODE === 'phone') {
   document.title = '我的任務卡';
-  document.body.style.background = '#f5f4f0';
 
   window.addEventListener('DOMContentLoaded', () => {
+    // 隱藏主控端，顯示手機端
+    document.getElementById('admin-ui').style.display = 'none';
+    const phoneUI = document.getElementById('phone-ui');
+    phoneUI.style.display = 'block';
+
     // 從 URL 解析參數
     const membersRaw = JSON.parse(decodeURIComponent(urlParams.get('members') || '[]'));
     const seed = urlParams.get('seed') || '';
@@ -287,7 +344,7 @@ if (MODE === 'phone') {
     const { verseOut, verseIn } = buildVerses(membersRaw);
 
     const me = membersRaw.find(m => m.id === myId);
-    if (!me) { document.body.innerHTML = '<div style="padding:40px;text-align:center;color:#c0392b;">找不到任務資料，請重新掃描。</div>'; return; }
+    if (!me) { phoneUI.innerHTML = '<div style="padding:40px;text-align:center;color:#c0392b;">找不到任務資料，請重新掃描。</div>'; return; }
 
     const ms = missions[myId] || [];
     const vo = verseOut[myId];
@@ -295,7 +352,7 @@ if (MODE === 'phone') {
     const senderM = verseIn[myId] ? membersRaw.find(m => m.id === verseIn[myId]) : null;
     const maxPts = ms.reduce((s,m) => s + (m.isPastor ? 6 : 4), 0) + 5;
 
-    document.body.innerHTML = `
+    phoneUI.innerHTML = `
       <div class="phone-wrap">
         <div class="phone-header">
           <div class="phone-icon">🕵️</div>
@@ -351,62 +408,7 @@ if (MODE === 'phone') {
 if (MODE === 'admin') {
   let members = [], missions = {}, verseOut = {}, verseIn = {}, selectedId = null, uid = 0, currentSeed = '';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('name-input').addEventListener('keypress', e => { if (e.key === 'Enter') addMember(); });
-    renderAdminUI();
-  });
-
-  function renderAdminUI() {
-    document.body.innerHTML = `
-      <div class="container">
-        <div class="header">
-          <h1>🕵️ 臥底問卷產生器</h1>
-          <p>十八尖山長老教會學生團契</p>
-        </div>
-        <div id="step1">
-          <div class="card">
-            <div class="card-title">成員名單</div>
-            <div class="input-row">
-              <input type="text" id="name-input" placeholder="輸入名字，按 Enter 新增" maxlength="10">
-              <button class="btn btn-primary" onclick="addMember()">新增</button>
-            </div>
-            <div id="member-list"><div class="empty-hint"><div class="icon">👥</div>先新增成員</div></div>
-          </div>
-          <div id="gen-area" style="display:none">
-            <div class="warning" id="warn-msg"></div>
-            <div class="input-row">
-              <input type="text" id="seed-input" placeholder="活動密鑰（如 20260401）留空則隨機">
-            </div>
-            <button class="btn btn-primary btn-full" onclick="generate()">✨ 生成每人的任務卡與 QR Code</button>
-          </div>
-          <div class="card" style="margin-top:14px;">
-            <div class="card-title">計分方式</div>
-            <div class="score-row"><span>🕵️ 成功套出一筆資訊</span><span class="sg">+2 分</span></div>
-            <div class="score-row"><span>🕵️ 套出牧師資訊 ★</span><span class="sa">+3 分</span></div>
-            <div class="score-row"><span>🕵️ 抓到別人套自己</span><span class="sg">+1 分</span></div>
-            <div class="score-row"><span>🕵️ 全清所有臥底目標</span><span class="sa">+2 獎勵</span></div>
-            <div class="score-row"><span>🕵️ 被成功套到（每題）</span><span class="sr">–1 分</span></div>
-            <div class="score-row"><span>📖 對方察覺你傳的經節</span><span class="sg">+3 分</span></div>
-            <div class="score-row"><span>📖 察覺對方傳來的經節</span><span class="sg">+2 分</span></div>
-            <div class="hint">💡 每人有兩個任務：臥底套話 ＋ 傳遞聖經經節。掃描 QR Code 即可在手機上看到完整任務卡。</div>
-          </div>
-        </div>
-        <div id="step2" style="display:none">
-          <div class="card">
-            <div style="font-size:13px;color:#888;margin-bottom:10px;">選擇成員，讓對方掃 QR Code</div>
-            <div class="name-tabs" id="name-tabs"></div>
-          </div>
-          <div id="card-display"></div>
-          <div class="actions">
-            <button class="btn btn-secondary" onclick="goBack()">← 重新設定</button>
-            <button class="btn btn-secondary" onclick="regen()">🔀 重新生成</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.getElementById('name-input').addEventListener('keypress', e => { if (e.key === 'Enter') addMember(); });
-  }
-
+  // ── 先把所有函數定義並掛到 window，再啟動 UI ──
   function addMember() {
     const inp = document.getElementById('name-input');
     const name = inp.value.trim();
@@ -439,6 +441,7 @@ if (MODE === 'admin') {
     else { warn.style.display = 'none'; }
   }
 
+  // 掛到 window 讓 onclick 能找到
   window.addMember = addMember;
   window.removeMember = removeMember;
   window.togglePastor = togglePastor;
@@ -471,6 +474,11 @@ if (MODE === 'admin') {
   window.generate = generate;
   window.regen = regen;
   window.goBack = goBack;
+
+  // 綁定 Enter 鍵（DOM 已存在，直接綁）
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('name-input').addEventListener('keypress', e => { if (e.key === 'Enter') addMember(); });
+  });
 
   function renderTabs() {
     document.getElementById('name-tabs').innerHTML = members.map(m => `
