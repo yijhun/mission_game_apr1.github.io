@@ -123,7 +123,36 @@ input[type=text]:focus, textarea:focus { border-color: #1D9E75; }
 .vr-body strong { font-size: 15px; color: #26215C; }
 .vr-rule { font-size: 12px; color: #7F77DD; margin-top: 8px; padding-top: 8px; border-top: 1px solid #CECBF6; line-height: 1.6; }
 
-/* ── 手機任務顯示模式 ── */
+.bonus-trigger { background: #FBEAF0; border: 1.5px solid #F4C0D1; border-radius: 12px; padding: 14px 16px; }
+.bt-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bt-label { font-size: 11px; font-weight: 700; color: #993556; letter-spacing: .06em; text-transform: uppercase; flex: 1; }
+.bt-pts { font-size: 10px; background: #FBEAF0; color: #993556; padding: 2px 8px; border-radius: 20px; border: 1px solid #F4C0D1; }
+.bt-name { font-size: 15px; font-weight: 600; color: #4B1528; margin-bottom: 8px; }
+.bt-desc { font-size: 13px; color: #72243E; line-height: 1.7; margin-bottom: 8px; }
+.bt-tip { font-size: 12px; color: #993556; padding-top: 8px; border-top: 0.5px solid #F4C0D1; line-height: 1.6; }
+.bonus-codeword { background: #EAF3DE; border: 1.5px solid #C0DD97; border-radius: 12px; padding: 14px 16px; }
+.bc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bc-label { font-size: 11px; font-weight: 700; color: #3B6D11; letter-spacing: .06em; text-transform: uppercase; flex: 1; }
+.bc-pts { font-size: 10px; background: #EAF3DE; color: #3B6D11; padding: 2px 8px; border-radius: 20px; border: 1px solid #C0DD97; }
+.bc-word { font-size: 28px; font-weight: 700; color: #173404; margin-bottom: 4px; letter-spacing: .02em; }
+.bc-hint { font-size: 11px; color: #639922; margin-bottom: 10px; }
+.bc-desc { font-size: 13px; color: #27500A; line-height: 1.7; margin-bottom: 8px; }
+.bc-tip { font-size: 12px; color: #3B6D11; padding-top: 8px; border-top: 0.5px solid #C0DD97; line-height: 1.6; }
+.phone-bonus-trigger { background: #FBEAF0; border: 1.5px solid #F4C0D1; border-radius: 12px; padding: 14px; }
+.pbt-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.pbt-label { font-size: 11px; font-weight: 700; color: #993556; letter-spacing: .06em; text-transform: uppercase; flex: 1; }
+.pbt-pts { font-size: 10px; background: #FBEAF0; color: #993556; padding: 2px 8px; border-radius: 20px; border: 1px solid #F4C0D1; }
+.pbt-name { font-size: 15px; font-weight: 600; color: #4B1528; margin-bottom: 8px; }
+.pbt-desc { font-size: 13px; color: #72243E; line-height: 1.7; margin-bottom: 8px; }
+.pbt-tip { font-size: 12px; color: #993556; padding-top: 8px; border-top: 0.5px solid #F4C0D1; line-height: 1.6; }
+.phone-bonus-codeword { background: #EAF3DE; border: 1.5px solid #C0DD97; border-radius: 12px; padding: 14px; }
+.pbc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.pbc-label { font-size: 11px; font-weight: 700; color: #3B6D11; letter-spacing: .06em; text-transform: uppercase; flex: 1; }
+.pbc-pts { font-size: 10px; background: #EAF3DE; color: #3B6D11; padding: 2px 8px; border-radius: 20px; border: 1px solid #C0DD97; }
+.pbc-word { font-size: 28px; font-weight: 700; color: #173404; margin-bottom: 4px; }
+.pbc-hint { font-size: 11px; color: #639922; margin-bottom: 10px; }
+.pbc-desc { font-size: 13px; color: #27500A; line-height: 1.7; margin-bottom: 8px; }
+.pbc-tip { font-size: 12px; color: #3B6D11; padding-top: 8px; border-top: 0.5px solid #C0DD97; line-height: 1.6; }
 .phone-wrap { max-width: 480px; margin: 0 auto; padding: 20px 16px 48px; }
 .phone-header { text-align: center; padding: 28px 0 20px; border-bottom: 1px solid #e8e7e3; margin-bottom: 20px; }
 .phone-icon { font-size: 36px; margin-bottom: 8px; }
@@ -296,6 +325,62 @@ const VERSES = [
   {text:'要謙虛、溫柔、忍耐，用愛心互相寬容。',ref:'以弗所書 4:2'},
 ];
 
+// ── 觸發任務題庫 ─────────────────────────────────────────────────────
+const TRIGGERS = [
+  {
+    name:'監聽食物',
+    desc:'等有人說到任何跟吃有關的詞（食物、吃飯、餓、便當、珍奶都算），立刻說：「你說到食物了！你要說一件讓大家意外的事。」',
+    tip:'到梅花亭報告：你有沒有成功觸發？對方說了什麼？',
+    tag:'搞笑',
+  },
+  {
+    name:'兩人獨走',
+    desc:'和某人兩個人走超過一分鐘，就問他：「如果你可以回去告訴一年前的自己一件事，你會說什麼？」',
+    tip:'不用特別製造機會，自然地和人一起走就會觸發。',
+    tag:'深度',
+  },
+  {
+    name:'手機偵探',
+    desc:'等有人拿出手機滑（看訊息、拍照都算），馬上走過去問「你在看什麼？」，聊開後再問「最近有沒有什麼讓你很感動的事？」',
+    tip:'這個任務順便讓大家把手機收起來 😄',
+    tag:'搞笑',
+  },
+  {
+    name:'問問牧師',
+    desc:'找個只有你們兩人的時機，輕鬆地問牧師：「你今晚最想說什麼？」讓他/她自由說，不要打斷。',
+    tip:'往往會引出牧師最真實的一面，比正式介紹更有溫度。',
+    tag:'深度',
+  },
+  {
+    name:'捕捉安靜',
+    desc:'觀察誰走路時比較安靜、看起來在想事情，走過去輕輕說「你在想什麼？」，不需要更多鋪墊。',
+    tip:'安靜的人通常有最有趣的內心世界。',
+    tag:'深度',
+  },
+  {
+    name:'新竹達人',
+    desc:'在三段不同的對話中自然帶出「新竹」，每次帶出後問對方「你在新竹有沒有什麼推薦？」收集三個不同人的答案。',
+    tip:'到梅花亭分享你收集到最有趣的推薦！',
+    tag:'搞笑',
+  },
+];
+
+// ── 暗號詞題庫 ─────────────────────────────────────────────────────
+const CODEWORDS = [
+  {word:'蘋果', hint:'水果類'},
+  {word:'星星', hint:'天空類'},
+  {word:'咖啡', hint:'飲品類'},
+  {word:'地圖', hint:'工具類'},
+  {word:'颱風', hint:'天氣類'},
+  {word:'鑰匙', hint:'物品類'},
+  {word:'貓咪', hint:'動物類'},
+  {word:'海浪', hint:'自然類'},
+  {word:'電梯', hint:'建築類'},
+  {word:'奶茶', hint:'飲品類'},
+  {word:'月亮', hint:'天空類'},
+  {word:'火車', hint:'交通類'},
+];
+
 // ── 種子亂數 ──────────────────────────────────────────────────────────
 let seededRandom = Math.random;
 function mulberry32(a) {
@@ -378,6 +463,26 @@ function buildVerses(members) {
   return { verseOut, verseIn };
 }
 
+function buildBonusTasks(members) {
+  const shuffledM = shuffle([...members]);
+  const usedT = [], usedC = [];
+  const bonusOut = {};
+  shuffledM.forEach((member, i) => {
+    if (i % 2 === 0) {
+      const avail = TRIGGERS.map((t,ti) => ({t,ti})).filter(x => !usedT.includes(x.ti));
+      const pick = shuffle(avail)[0] || {t: TRIGGERS[i % TRIGGERS.length], ti: i % TRIGGERS.length};
+      usedT.push(pick.ti);
+      bonusOut[member.id] = { type: 'trigger', ...pick.t };
+    } else {
+      const avail = CODEWORDS.map((c,ci) => ({c,ci})).filter(x => !usedC.includes(x.ci));
+      const pick = shuffle(avail)[0] || {c: CODEWORDS[i % CODEWORDS.length], ci: i % CODEWORDS.length};
+      usedC.push(pick.ci);
+      bonusOut[member.id] = { type: 'codeword', ...pick.c };
+    }
+  });
+  return bonusOut;
+}
+
 // ── 判斷目前是哪個模式 ────────────────────────────────────────────────
 const urlParams = new URLSearchParams(location.search);
 const MODE = urlParams.has('m') ? 'phone' : 'admin';
@@ -402,15 +507,38 @@ if (MODE === 'phone') {
     setSeed(seed);
     const missions = buildMissions(membersRaw);
     const { verseOut, verseIn } = buildVerses(membersRaw);
+    const bonusOut = buildBonusTasks(membersRaw);
 
     const me = membersRaw.find(m => m.id === myId);
     if (!me) { phoneUI.innerHTML = '<div style="padding:40px;text-align:center;color:#c0392b;">找不到任務資料，請重新掃描。</div>'; return; }
 
     const ms = missions[myId] || [];
     const vo = verseOut[myId];
+    const bonus = bonusOut[myId];
     const targetM = vo ? membersRaw.find(m => m.id === vo.targetId) : null;
     const senderM = verseIn[myId] ? membersRaw.find(m => m.id === verseIn[myId]) : null;
-    const maxPts = ms.reduce((s,m) => s + (m.isPastor ? 6 : 4), 0) + 5;
+    const maxPts = ms.reduce((s,m) => s + (m.isPastor ? 6 : 4), 0) + 7;
+
+    const bonusHtml = bonus.type === 'trigger' ? `
+      <div class="phone-bonus-trigger">
+        <div class="pbt-header">
+          <div class="pbt-label">🎯 觸發任務</div>
+          <div class="pbt-pts">成功 +2</div>
+        </div>
+        <div class="pbt-name">${bonus.name}</div>
+        <div class="pbt-desc">${bonus.desc}</div>
+        <div class="pbt-tip">💡 ${bonus.tip}</div>
+      </div>` : `
+      <div class="phone-bonus-codeword">
+        <div class="pbc-header">
+          <div class="pbc-label">🔤 暗號任務</div>
+          <div class="pbc-pts">說出 +1・抓到別人 +1</div>
+        </div>
+        <div class="pbc-word">${bonus.word}</div>
+        <div class="pbc-hint">類別：${bonus.hint}</div>
+        <div class="pbc-desc">在走路對話中自然說出這個詞。任何人察覺並說「你說暗號了！」——你們兩人各得 +1 分。</div>
+        <div class="pbc-tip">💡 同時留意別人——你抓到別人的暗號詞也得 +1。</div>
+      </div>`;
 
     phoneUI.innerHTML = `
       <div class="phone-wrap">
@@ -456,6 +584,11 @@ if (MODE === 'phone') {
           </div>
         </div>
 
+        <div class="phone-section">
+          <div class="phone-sec-title">${bonus.type === 'trigger' ? '🎯 觸發任務' : '🔤 暗號任務'}</div>
+          ${bonusHtml}
+        </div>
+
         <div class="phone-footer">山路同行・十八尖山團契活動<br>到梅花亭揭曉 🎯</div>
       </div>
     `;
@@ -466,7 +599,7 @@ if (MODE === 'phone') {
 //  主控端（電腦操作）
 // ════════════════════════════════════════════════════════════════════════
 if (MODE === 'admin') {
-  let members = [], missions = {}, verseOut = {}, verseIn = {}, selectedId = null, uid = 0, currentSeed = '';
+  let members = [], missions = {}, verseOut = {}, verseIn = {}, bonusOut = {}, selectedId = null, uid = 0, currentSeed = '';
 
   // ── 先把所有函數定義並掛到 window，再啟動 UI ──
   function addMember() {
@@ -513,6 +646,7 @@ if (MODE === 'admin') {
     missions = buildMissions(members);
     const v = buildVerses(members);
     verseOut = v.verseOut; verseIn = v.verseIn;
+    bonusOut = buildBonusTasks(members);
     document.getElementById('step1').style.display = 'none';
     document.getElementById('step2').style.display = 'block';
     selectedId = null; renderTabs();
@@ -523,6 +657,7 @@ if (MODE === 'admin') {
     missions = buildMissions(members);
     const v = buildVerses(members);
     verseOut = v.verseOut; verseIn = v.verseIn;
+    bonusOut = buildBonusTasks(members);
     renderTabs();
     if (selectedId) showCard(selectedId);
   }
@@ -558,9 +693,10 @@ if (MODE === 'admin') {
     const member = members.find(m => m.id === id);
     const ms = missions[id] || [];
     const vo = verseOut[id];
+    const bonus = bonusOut[id];
     const targetM = vo ? members.find(m => m.id === vo.targetId) : null;
     const senderM = verseIn[id] ? members.find(m => m.id === verseIn[id]) : null;
-    const maxPts = ms.reduce((s, m) => s + (m.isPastor ? 6 : 4), 0) + 5;
+    const maxPts = ms.reduce((s, m) => s + (m.isPastor ? 6 : 4), 0) + 7;
 
     const blocks = ms.map((m, i) => {
       const label = m.isPastor ? `目標 ${i+1} ★` : `目標 ${i+1}`;
@@ -575,11 +711,26 @@ if (MODE === 'admin') {
       </div>`;
     }).join('');
 
+    const bonusBlock = bonus ? (bonus.type === 'trigger' ? `
+      <div class="bonus-trigger">
+        <div class="bt-header"><div class="bt-label">🎯 觸發任務</div><div class="bt-pts">成功 +2</div></div>
+        <div class="bt-name">${bonus.name}</div>
+        <div class="bt-desc">${bonus.desc}</div>
+        <div class="bt-tip">💡 ${bonus.tip}</div>
+      </div>` : `
+      <div class="bonus-codeword">
+        <div class="bc-header"><div class="bc-label">🔤 暗號任務</div><div class="bc-pts">說出 +1・抓到別人 +1</div></div>
+        <div class="bc-word">${bonus.word}</div>
+        <div class="bc-hint">類別：${bonus.hint}</div>
+        <div class="bc-desc">在走路對話中自然說出這個詞。任何人察覺並說「你說暗號了！」——你們兩人各得 +1 分。</div>
+        <div class="bc-tip">💡 同時留意別人——你抓到別人的暗號詞也得 +1。</div>
+      </div>`) : '';
+
     return `
       <div class="mc-head">
         <div>
           <div class="mc-title">${member.isPastor ? '★ ' : ''}${member.name} 的任務卡</div>
-          <div class="mc-sub">${ms.length} 個臥底目標・1 個傳遞任務・最高 ${maxPts} 分</div>
+          <div class="mc-sub">${ms.length} 個臥底目標・傳遞任務・${bonus?.type === 'trigger' ? '觸發任務' : '暗號任務'}・最高 ${maxPts} 分</div>
         </div>
         <div class="mc-seal">🤫 勿外洩</div>
       </div>
@@ -599,7 +750,9 @@ if (MODE === 'admin') {
         <div class="vr-header"><div class="vr-icon">📬</div><div class="vr-title">你也會收到一節經文</div><div class="vr-pts">察覺成功 +2</div></div>
         <div class="vr-body"><strong>${senderM ? senderM.name : '—'}</strong> 會在對話中自然說出一節聖經給你聽。你不知道是哪一節，靠自己察覺。</div>
         <div class="vr-rule">察覺到了就默默記住，到梅花亭再說出來確認。</div>
-      </div>`;
+      </div>
+      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">${bonus?.type === 'trigger' ? '🎯 觸發任務' : '🔤 暗號任務'}</div><div class="sd-line"></div></div>
+      ${bonusBlock}`;
   }
 
   function showCard(id) {
