@@ -62,6 +62,66 @@ input[type=text]:focus, textarea:focus { border-color: #1D9E75; }
 .copy-btn:hover { background: #ebe9e3; }
 .copy-btn.done { background: #E1F5EE; border-color: #9FE1CB; color: #0F6E56; }
 .seed-info { background: #E1F5EE; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #0F6E56; margin-bottom: 14px; line-height: 1.6; }
+.toggle-btn { width: 100%; padding: 12px; margin: 10px 0 0; border: 1.5px dashed #e8e7e3; border-radius: 10px; background: #fafaf8; font-size: 13px; cursor: pointer; color: #888; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .2s; }
+.toggle-btn:hover { background: #f0efe9; border-color: #ccc; color: #555; }
+.toggle-btn.open { background: #FAEEDA; border-color: #FAC775; color: #854F0B; }
+.mission-text-area { display: none; margin-top: 12px; }
+.mission-text-area.open { display: block; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+.tb { border-radius: 10px; padding: 13px; margin-bottom: 10px; border: 1px solid; }
+.tb:last-of-type { margin-bottom: 0; }
+.tb-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.tb-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.tb-name { font-size: 15px; font-weight: 600; flex: 1; }
+.tb-pts { font-size: 10px; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.q-row { display: flex; gap: 9px; margin-bottom: 7px; font-size: 13px; line-height: 1.6; align-items: flex-start; }
+.q-row:last-of-type { margin-bottom: 8px; }
+.q-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.faith-mark { font-size: 10px; opacity: 0.65; }
+.ban { font-size: 11px; padding: 5px 9px; border-radius: 6px; line-height: 1.6; }
+.ban-tag { font-size: 10px; padding: 1px 6px; border-radius: 4px; margin: 1px; }
+.section-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 12px; }
+.sd-line { flex: 1; height: 1px; background: #f0efe9; }
+.sd-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #bbb; white-space: nowrap; }
+.mc-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.mc-title { font-size: 15px; font-weight: 600; }
+.mc-sub { font-size: 12px; color: #888; margin-top: 2px; }
+.mc-seal { font-size: 11px; background: #fce8c3; color: #854F0B; padding: 4px 10px; border-radius: 20px; white-space: nowrap; font-weight: 600; }
+.tb-teal { background: #f0fdf7; border-color: #9FE1CB; }
+.tb-teal .tb-label { color: #1D9E75; } .tb-teal .tb-name { color: #085041; }
+.tb-teal .q-dot { background: #1D9E75; } .tb-teal .tb-pts { background: #E1F5EE; color: #0F6E56; }
+.tb-teal .ban { background: #d4f0e6; color: #0F6E56; } .tb-teal .ban-tag { background: #9FE1CB; color: #04342C; }
+.tb-purple { background: #f5f4ff; border-color: #CECBF6; }
+.tb-purple .tb-label { color: #7F77DD; } .tb-purple .tb-name { color: #26215C; }
+.tb-purple .q-dot { background: #7F77DD; } .tb-purple .tb-pts { background: #EEEDFE; color: #534AB7; }
+.tb-purple .ban { background: #e0defb; color: #534AB7; } .tb-purple .ban-tag { background: #CECBF6; color: #26215C; }
+.tb-blue { background: #f0f7ff; border-color: #B5D4F4; }
+.tb-blue .tb-label { color: #378ADD; } .tb-blue .tb-name { color: #042C53; }
+.tb-blue .q-dot { background: #378ADD; } .tb-blue .tb-pts { background: #E6F1FB; color: #185FA5; }
+.tb-blue .ban { background: #d0e8f9; color: #185FA5; } .tb-blue .ban-tag { background: #B5D4F4; color: #042C53; }
+.tb-amber { background: #fffbf0; border-color: #FAC775; }
+.tb-amber .tb-label { color: #BA7517; } .tb-amber .tb-name { color: #412402; }
+.tb-amber .q-dot { background: #EF9F27; } .tb-amber .tb-pts { background: #FAEEDA; color: #854F0B; }
+.tb-amber .ban { background: #fce8c3; color: #854F0B; } .tb-amber .ban-tag { background: #FAC775; color: #412402; }
+.verse-send { background: #f0fdf7; border: 1.5px solid #5DCAA5; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+.vs-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.vs-icon { font-size: 17px; }
+.vs-title { font-size: 13px; font-weight: 600; color: #085041; flex: 1; }
+.vs-pts { font-size: 10px; background: #E1F5EE; color: #0F6E56; padding: 3px 9px; border-radius: 20px; }
+.vs-target { font-size: 13px; color: #1D9E75; margin-bottom: 10px; }
+.vs-target strong { font-size: 15px; color: #085041; }
+.verse-box { background: white; border: 1px solid #9FE1CB; border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+.verse-quote { font-size: 14px; line-height: 1.8; color: #1a1a1a; font-style: italic; margin-bottom: 4px; }
+.verse-ref { font-size: 12px; color: #1D9E75; font-weight: 500; }
+.vs-rule { font-size: 12px; color: #1D9E75; line-height: 1.6; padding-top: 10px; border-top: 1px solid #9FE1CB; }
+.verse-recv { background: #f5f4ff; border: 1.5px solid #CECBF6; border-radius: 12px; padding: 14px 16px; }
+.vr-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.vr-icon { font-size: 17px; }
+.vr-title { font-size: 13px; font-weight: 600; color: #26215C; }
+.vr-pts { font-size: 10px; background: #EEEDFE; color: #534AB7; padding: 3px 9px; border-radius: 20px; margin-left: auto; }
+.vr-body { font-size: 13px; color: #534AB7; line-height: 1.7; }
+.vr-body strong { font-size: 15px; color: #26215C; }
+.vr-rule { font-size: 12px; color: #7F77DD; margin-top: 8px; padding-top: 8px; border-top: 1px solid #CECBF6; line-height: 1.6; }
 
 /* ── 手機任務顯示模式 ── */
 .phone-wrap { max-width: 480px; margin: 0 auto; padding: 20px 16px 48px; }
@@ -494,6 +554,54 @@ if (MODE === 'admin') {
     return `${base}?m=${id}&seed=${encodeURIComponent(currentSeed)}&members=${membersEncoded}`;
   }
 
+  function renderMissionBlock(id) {
+    const member = members.find(m => m.id === id);
+    const ms = missions[id] || [];
+    const vo = verseOut[id];
+    const targetM = vo ? members.find(m => m.id === vo.targetId) : null;
+    const senderM = verseIn[id] ? members.find(m => m.id === verseIn[id]) : null;
+    const maxPts = ms.reduce((s, m) => s + (m.isPastor ? 6 : 4), 0) + 5;
+
+    const blocks = ms.map((m, i) => {
+      const label = m.isPastor ? `目標 ${i+1} ★` : `目標 ${i+1}`;
+      const pts = m.isPastor ? '+3 ★' : '+2';
+      const q1h = m.q1 ? `<div class="q-row"><div class="q-dot"></div><div>${m.q1.q}</div></div>` : '';
+      const q2h = m.q2 ? `<div class="q-row"><div class="q-dot"></div><div>${m.q2.q} <span class="faith-mark">（信仰向）</span></div></div>` : '';
+      const bans = [m.q1?.ban, m.q2?.ban].filter(Boolean).map(b => `<span class="ban-tag">${b}</span>`).join(' ');
+      return `<div class="tb tb-${m.color}">
+        <div class="tb-top"><div class="tb-label">${label}</div><div class="tb-name">${m.target.name}</div><div class="tb-pts">${pts} 分</div></div>
+        ${q1h}${q2h}
+        <div class="ban">⛔ 禁止直接問：${bans}</div>
+      </div>`;
+    }).join('');
+
+    return `
+      <div class="mc-head">
+        <div>
+          <div class="mc-title">${member.isPastor ? '★ ' : ''}${member.name} 的任務卡</div>
+          <div class="mc-sub">${ms.length} 個臥底目標・1 個傳遞任務・最高 ${maxPts} 分</div>
+        </div>
+        <div class="mc-seal">🤫 勿外洩</div>
+      </div>
+      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">🕵️ 臥底任務</div><div class="sd-line"></div></div>
+      ${blocks}
+      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">📖 傳遞任務</div><div class="sd-line"></div></div>
+      <div class="verse-send">
+        <div class="vs-header"><div class="vs-icon">📤</div><div class="vs-title">你要傳遞這節經文</div><div class="vs-pts">成功 +3</div></div>
+        <div class="vs-target">傳給：<strong>${targetM ? targetM.name : '—'}</strong></div>
+        <div class="verse-box">
+          <div class="verse-quote">「${vo ? vo.verse : ''}」</div>
+          <div class="verse-ref">${vo ? vo.ref : ''}</div>
+        </div>
+        <div class="vs-rule">在對話中自然說出，讓對方自己察覺。不能說「這節送給你」，不能讓其他人察覺。</div>
+      </div>
+      <div class="verse-recv">
+        <div class="vr-header"><div class="vr-icon">📬</div><div class="vr-title">你也會收到一節經文</div><div class="vr-pts">察覺成功 +2</div></div>
+        <div class="vr-body"><strong>${senderM ? senderM.name : '—'}</strong> 會在對話中自然說出一節聖經給你聽。你不知道是哪一節，靠自己察覺。</div>
+        <div class="vr-rule">察覺到了就默默記住，到梅花亭再說出來確認。</div>
+      </div>`;
+  }
+
   function showCard(id) {
     selectedId = id; renderTabs();
     const member = members.find(m => m.id === id);
@@ -505,12 +613,30 @@ if (MODE === 'admin') {
         <div class="qr-sub">請讓 ${member.name} 用手機掃描下方 QR Code</div>
         <div class="qr-box" id="qrbox-${id}"></div>
         <div class="qr-note">掃描後手機會直接顯示任務，其他人不要偷看 👀<br>如果掃描失敗，改用下方「複製連結」</div>
-        <button class="copy-btn" id="copy-url-btn" onclick="copyURL(${id})">🔗 複製任務連結（傳 LINE 也可以）</button>
+        <button class="copy-btn" style="margin-bottom:6px;" id="copy-url-btn" onclick="copyURL(${id})">🔗 複製任務連結（傳 LINE 也可以）</button>
+
+        <button class="toggle-btn" id="toggle-btn-${id}" onclick="toggleMission(${id})">
+          👁️ 展開文字版任務（QR Code 失效時備用）
+        </button>
+        <div class="mission-text-area" id="mission-area-${id}">
+          ${renderMissionBlock(id)}
+        </div>
       </div>
     `;
     setTimeout(() => renderQR(id, url), 50);
   }
   window.showCard = showCard;
+
+  function toggleMission(id) {
+    const area = document.getElementById(`mission-area-${id}`);
+    const btn = document.getElementById(`toggle-btn-${id}`);
+    const isOpen = area.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.textContent = isOpen
+      ? '🙈 隱藏文字版任務（防止旁人偷看）'
+      : '👁️ 展開文字版任務（QR Code 失效時備用）';
+  }
+  window.toggleMission = toggleMission;
 
   function renderQR(id, url) {
     const box = document.getElementById(`qrbox-${id}`);
