@@ -468,17 +468,13 @@ function buildBonusTasks(members) {
   const usedT = [], usedC = [];
   const bonusOut = {};
   shuffledM.forEach((member, i) => {
-    if (i % 2 === 0) {
-      const avail = TRIGGERS.map((t,ti) => ({t,ti})).filter(x => !usedT.includes(x.ti));
-      const pick = shuffle(avail)[0] || {t: TRIGGERS[i % TRIGGERS.length], ti: i % TRIGGERS.length};
-      usedT.push(pick.ti);
-      bonusOut[member.id] = { type: 'trigger', ...pick.t };
-    } else {
-      const avail = CODEWORDS.map((c,ci) => ({c,ci})).filter(x => !usedC.includes(x.ci));
-      const pick = shuffle(avail)[0] || {c: CODEWORDS[i % CODEWORDS.length], ci: i % CODEWORDS.length};
-      usedC.push(pick.ci);
-      bonusOut[member.id] = { type: 'codeword', ...pick.c };
-    }
+    const availT = TRIGGERS.map((t,ti) => ({t,ti})).filter(x => !usedT.includes(x.ti));
+    const pickT = shuffle(availT)[0] || {t: TRIGGERS[i % TRIGGERS.length], ti: i % TRIGGERS.length};
+    usedT.push(pickT.ti);
+    const availC = CODEWORDS.map((c,ci) => ({c,ci})).filter(x => !usedC.includes(x.ci));
+    const pickC = shuffle(availC)[0] || {c: CODEWORDS[i % CODEWORDS.length], ci: i % CODEWORDS.length};
+    usedC.push(pickC.ci);
+    bonusOut[member.id] = { trigger: pickT.t, codeword: pickC.c };
   });
   return bonusOut;
 }
@@ -517,25 +513,26 @@ if (MODE === 'phone') {
     const bonus = bonusOut[myId];
     const targetM = vo ? membersRaw.find(m => m.id === vo.targetId) : null;
     const senderM = verseIn[myId] ? membersRaw.find(m => m.id === verseIn[myId]) : null;
-    const maxPts = ms.reduce((s,m) => s + (m.isPastor ? 6 : 4), 0) + 7;
+    const maxPts = ms.reduce((s,m) => s + (m.isPastor ? 6 : 4), 0) + 8;
 
-    const bonusHtml = bonus.type === 'trigger' ? `
+    const triggerHtml = `
       <div class="phone-bonus-trigger">
         <div class="pbt-header">
           <div class="pbt-label">🎯 觸發任務</div>
           <div class="pbt-pts">成功 +2</div>
         </div>
-        <div class="pbt-name">${bonus.name}</div>
-        <div class="pbt-desc">${bonus.desc}</div>
-        <div class="pbt-tip">💡 ${bonus.tip}</div>
-      </div>` : `
+        <div class="pbt-name">${bonus.trigger.name}</div>
+        <div class="pbt-desc">${bonus.trigger.desc}</div>
+        <div class="pbt-tip">💡 ${bonus.trigger.tip}</div>
+      </div>`;
+    const codewordHtml = `
       <div class="phone-bonus-codeword">
         <div class="pbc-header">
           <div class="pbc-label">🔤 暗號任務</div>
           <div class="pbc-pts">說出 +1・抓到別人 +1</div>
         </div>
-        <div class="pbc-word">${bonus.word}</div>
-        <div class="pbc-hint">類別：${bonus.hint}</div>
+        <div class="pbc-word">${bonus.codeword.word}</div>
+        <div class="pbc-hint">類別：${bonus.codeword.hint}</div>
         <div class="pbc-desc">在走路對話中自然說出這個詞。任何人察覺並說「你說暗號了！」——你們兩人各得 +1 分。</div>
         <div class="pbc-tip">💡 同時留意別人——你抓到別人的暗號詞也得 +1。</div>
       </div>`;
@@ -585,8 +582,13 @@ if (MODE === 'phone') {
         </div>
 
         <div class="phone-section">
-          <div class="phone-sec-title">${bonus.type === 'trigger' ? '🎯 觸發任務' : '🔤 暗號任務'}</div>
-          ${bonusHtml}
+          <div class="phone-sec-title">🎯 觸發任務</div>
+          ${triggerHtml}
+        </div>
+
+        <div class="phone-section">
+          <div class="phone-sec-title">🔤 暗號任務</div>
+          ${codewordHtml}
         </div>
 
         <div class="phone-footer">山路同行・十八尖山團契活動<br>到梅花亭揭曉 🎯</div>
@@ -696,7 +698,7 @@ if (MODE === 'admin') {
     const bonus = bonusOut[id];
     const targetM = vo ? members.find(m => m.id === vo.targetId) : null;
     const senderM = verseIn[id] ? members.find(m => m.id === verseIn[id]) : null;
-    const maxPts = ms.reduce((s, m) => s + (m.isPastor ? 6 : 4), 0) + 7;
+    const maxPts = ms.reduce((s, m) => s + (m.isPastor ? 6 : 4), 0) + 8;
 
     const blocks = ms.map((m, i) => {
       const label = m.isPastor ? `目標 ${i+1} ★` : `目標 ${i+1}`;
@@ -711,26 +713,27 @@ if (MODE === 'admin') {
       </div>`;
     }).join('');
 
-    const bonusBlock = bonus ? (bonus.type === 'trigger' ? `
+    const triggerBlock = bonus ? `
       <div class="bonus-trigger">
         <div class="bt-header"><div class="bt-label">🎯 觸發任務</div><div class="bt-pts">成功 +2</div></div>
-        <div class="bt-name">${bonus.name}</div>
-        <div class="bt-desc">${bonus.desc}</div>
-        <div class="bt-tip">💡 ${bonus.tip}</div>
-      </div>` : `
+        <div class="bt-name">${bonus.trigger.name}</div>
+        <div class="bt-desc">${bonus.trigger.desc}</div>
+        <div class="bt-tip">💡 ${bonus.trigger.tip}</div>
+      </div>` : '';
+    const codewordBlock = bonus ? `
       <div class="bonus-codeword">
         <div class="bc-header"><div class="bc-label">🔤 暗號任務</div><div class="bc-pts">說出 +1・抓到別人 +1</div></div>
-        <div class="bc-word">${bonus.word}</div>
-        <div class="bc-hint">類別：${bonus.hint}</div>
+        <div class="bc-word">${bonus.codeword.word}</div>
+        <div class="bc-hint">類別：${bonus.codeword.hint}</div>
         <div class="bc-desc">在走路對話中自然說出這個詞。任何人察覺並說「你說暗號了！」——你們兩人各得 +1 分。</div>
         <div class="bc-tip">💡 同時留意別人——你抓到別人的暗號詞也得 +1。</div>
-      </div>`) : '';
+      </div>` : '';
 
     return `
       <div class="mc-head">
         <div>
           <div class="mc-title">${member.isPastor ? '★ ' : ''}${member.name} 的任務卡</div>
-          <div class="mc-sub">${ms.length} 個臥底目標・傳遞任務・${bonus?.type === 'trigger' ? '觸發任務' : '暗號任務'}・最高 ${maxPts} 分</div>
+          <div class="mc-sub">${ms.length} 個臥底目標・傳遞任務・觸發任務・暗號任務・最高 ${maxPts} 分</div>
         </div>
         <div class="mc-seal">🤫 勿外洩</div>
       </div>
@@ -751,8 +754,10 @@ if (MODE === 'admin') {
         <div class="vr-body"><strong>${senderM ? senderM.name : '—'}</strong> 會在對話中自然說出一節聖經給你聽。你不知道是哪一節，靠自己察覺。</div>
         <div class="vr-rule">察覺到了就默默記住，到梅花亭再說出來確認。</div>
       </div>
-      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">${bonus?.type === 'trigger' ? '🎯 觸發任務' : '🔤 暗號任務'}</div><div class="sd-line"></div></div>
-      ${bonusBlock}`;
+      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">🎯 觸發任務</div><div class="sd-line"></div></div>
+      ${triggerBlock}
+      <div class="section-divider"><div class="sd-line"></div><div class="sd-label">🔤 暗號任務</div><div class="sd-line"></div></div>
+      ${codewordBlock}`;
   }
 
   function showCard(id) {
